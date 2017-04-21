@@ -1,25 +1,24 @@
-var mongojs = require('mongojs');
-var db=mongojs('DontEatAlone',['User']);
+var UserModel=require("../model/userModel");
 
-module.exports.checkPhoneRegister=function(phone, callback){
-    db.User.find({Phone:phone},function(err,data){
-        if(data.length==0){
-            callback({"status":"Phone not exits"});
+
+module.exports.registerNewUser = function (userdb, callback) {
+    UserModel.create(userdb, function (err, data) {
+        if (data.length != 0) {
+            callback({ "status": "Insert success" });
+        }
+        else {
+            callback({ "status": "Insert fail" });
+        }
+    })
+};
+
+module.exports.checkPhoneExits = function (phone, callback) {
+    UserModel.find({Phone:phone},function(err,data){
+        if(data.length!=0){
+            callback({"status":"this phone is exits"});
         }
         else{
-            callback({"status":"Phone exits"});
+            callback({"status":"this phone isnt exits"});
         }
-    });
-}
-
-module.exports.registerUser=function(data,callback){
-    db.User.insert(data, function(err,data){
-        if(data.length==0){
-            callback({"reponse":"Insert fail"});
-        }
-        else{
-            callback({"reponse":"Insert success"});
-        }
-    });
-}
-
+    })
+};
