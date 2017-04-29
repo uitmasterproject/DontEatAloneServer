@@ -1,8 +1,15 @@
-var StatusModel=require("../model/statusModel");
+var MyStatusModel=require("../model/myStatusModel");
 
-module.exports.addStatus=function(infoStatus, callback){
-    StatusModel.create(infoStatus, function(err,data){
-        if (data.length != 0) {
+module.exports.addStatus=function(phone,infoStatus, callback){
+
+    var myInfoStatus={
+        "phone":phone,
+        "myinfoStatus": infoStatus
+    };
+
+    MyStatusModel.findOneAndUpdate({phone:phone},{$push: {myinfoStatus: infoStatus}},{safe: true, upsert: true, new : true}, function(err,data){
+        
+        if (err ==null ) {
             callback({ "status": "Insert success" });
         }
         else {
@@ -11,11 +18,25 @@ module.exports.addStatus=function(infoStatus, callback){
     });
 };
 
-module.exports.getAllStatus=function(callback){
-    StatusModel.find(function(err,data){
+module.exports.getAllStatus=function(phone,callback){
+    MyStatusModel.find({phone:phone},function(err,data){
         if(data.length!=0){
-            console.log(data);
-            callback(data);
+            callback(data[0].myinfoStatus);
         }
     });
 };
+
+module.exports.deleteStatusBlog=function(phone,date,callback){
+    MyStatusModel.update(
+        {_id: "58fef74e1915100c44de8c68"}, 
+        { $pull: { "myinfoStatus" : { date: date } } },
+        function(err,data){
+            if(err==null){
+                callback({"status":"Delete success"});
+            }
+            else{
+                callback({"status":"Delete fail"});
+            }
+        }
+    );
+}

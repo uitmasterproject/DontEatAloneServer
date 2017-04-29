@@ -6,9 +6,7 @@ var frameSchema = new schema({
     date:String,
     infoStatus:String,
     feeling:String,
-    image: Array
+    image: [String]
 });
 
-var status = mongoose.model("Status",frameSchema);
-
-module.exports=status;
+module.exports=frameSchema;
