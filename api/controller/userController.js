@@ -1,6 +1,7 @@
 var register=require("../method/register");
 var login=require("../method/login");
 var blog=require("../method/blog");
+var notification=require("../method/notification");
 
 module.exports=function(app){
     app.post("/register",function(req,res){
@@ -36,7 +37,9 @@ module.exports=function(app){
 
     app.post("/user/:phone",function(req,res){
         var phone=req.params.phone;
+        console.log(phone);
         login.getProfile(phone,function(data){
+            console.log(data);
             res.json(data);
         })
     });
@@ -62,5 +65,16 @@ module.exports=function(app){
         blog.deleteStatusBlog(phone,date,function(data){
             res.json(data);
         })
+    })
+
+    app.get("/notification/:phone",function(req,res){
+        var phone=req.params.phone;
+        notification.getInfoNotification(phone,function(data){
+            res.json(data);
+        })
+    })
+
+    app.put("/notification_update_read/:phoneRecevice/:phoneSend/:status/:timeSend",function(req,res){
+        notification.updateReadNotification(req.params.phoneRecevice,req.params.phoneSend, req.params.status, req.params.timeSend);
     })
 }

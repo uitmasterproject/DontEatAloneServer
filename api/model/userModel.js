@@ -10,6 +10,7 @@ var frameSchema = new schema({
     Birthday:String,
     Gender:String,
     Address:String,
+    LatLngAdress:String,
     Hobby:String,
     Character:String
 });

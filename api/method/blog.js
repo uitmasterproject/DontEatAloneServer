@@ -28,7 +28,7 @@ module.exports.getAllStatus=function(phone,callback){
 
 module.exports.deleteStatusBlog=function(phone,date,callback){
     MyStatusModel.update(
-        {_id: "58fef74e1915100c44de8c68"}, 
+        {phone: phone}, 
         { $pull: { "myinfoStatus" : { date: date } } },
         function(err,data){
             if(err==null){

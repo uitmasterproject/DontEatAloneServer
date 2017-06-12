@@ -37,5 +37,6 @@ module.exports.getProfile=function(phone, callback){
             console.log(data);
             callback(data[0]);
         }
+    
     })
 };
