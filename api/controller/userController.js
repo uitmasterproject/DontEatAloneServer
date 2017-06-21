@@ -2,6 +2,7 @@ var register=require("../method/register");
 var login=require("../method/login");
 var blog=require("../method/blog");
 var notification=require("../method/notification");
+var profile=require("../method/profile");
 
 module.exports=function(app){
     app.post("/register",function(req,res){
@@ -76,5 +77,12 @@ module.exports=function(app){
 
     app.put("/notification_update_read/:phoneRecevice/:phoneSend/:status/:timeSend",function(req,res){
         notification.updateReadNotification(req.params.phoneRecevice,req.params.phoneSend, req.params.status, req.params.timeSend);
+    })
+
+    app.post("/profile_update",function(req,res){
+        console.log(req.body);
+        profile.updateProfile(req.body.phone,req.body.which,req.body.content,function(data){
+            
+        })
     })
 }
