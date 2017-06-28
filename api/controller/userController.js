@@ -3,6 +3,7 @@ var login=require("../method/login");
 var blog=require("../method/blog");
 var notification=require("../method/notification");
 var profile=require("../method/profile");
+var restaurant=require("../method/restaurant");
 
 module.exports=function(app){
     app.post("/register",function(req,res){
@@ -83,6 +84,13 @@ module.exports=function(app){
         console.log(req.body);
         profile.updateProfile(req.body.phone,req.body.which,req.body.content,function(data){
             
+        })
+    })
+
+    app.get("/restaurant/:latlng",function(req,res){
+        console.log(req.params.latlng);
+        restaurant.getRestaurant(req.params.latlng, function(data){
+            res.json(data);
         })
     })
 }

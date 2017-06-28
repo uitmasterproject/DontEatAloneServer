@@ -27,7 +27,7 @@ module.exports = function (io) {
                 }
                 console.log(element.phone + "-------------------------------------------------------------");
             }, this);
-            console.log("++++++++++++++++++++++++++++++++++++++++"+check);
+            console.log("++++++++++++++++++++++++++++++++++++++++" + check);
             if (check === 0) {
                 var requireUser = {
                     "phone": temp[0],
@@ -73,13 +73,13 @@ module.exports = function (io) {
                             }
 
                             if (fail == true) {
-                                temp[7].split(",").forEach(function(ele) {
-                                    if(result.Character.indexOf(ele)!=-1)
-                                    countsame+=1;
+                                temp[7].split(",").forEach(function (ele) {
+                                    if (result.Character.indexOf(ele) != -1)
+                                        countsame += 1;
                                 }, this);
-                                temp[8].split(",").forEach(function(ele) {
-                                    if(result.Character.indexOf(ele)!=-1)
-                                    countsame+=1;
+                                temp[8].split(",").forEach(function (ele) {
+                                    if (result.Character.indexOf(ele) != -1)
+                                        countsame += 1;
                                 }, this);
                                 var item = {
                                     "accordantUser": element.phone,
@@ -89,6 +89,7 @@ module.exports = function (io) {
                                     "gender": result.Gender,
                                     "age": ageElement,
                                     "address": result.Address,
+                                    "latlng": element.inforRequire.latlng,
                                     "character": result.Character
                                 }
                                 userLike.push(item);
@@ -143,33 +144,52 @@ module.exports = function (io) {
         //7 place
         //8 result
         socket.on('reponseInvitation', function (data) {//phoneReceiver is phone Send this message
-        
+
             var temp = data.split("|");
-            if (temp[8] === "refuse") {
-                socket.broadcast.emit("resultInvitation", {
+            console.log("user off");
+            //check inviter Online or Offline
+            var check = 0;
+            userOnline.forEach(function (element) {
+                if (element.phone === temp[0])
+                    check = 1;
+            }, this);
+
+            //check=0 => inviter dont have in list UserOnline => this inviter Offline
+            if (check == 0) {
+                console.log("user off");
+                socket.emit('userInviteOff', {
                     "phoneReceiver": temp[0],
-                    "result": {
-                        "phoneSend": temp[2],
-                        "nameSend": temp[3],
-                        "resultInvite": "refuse"
-                    }
+                    "nameReceiver": temp[1]
                 });
-                updateStatusInvitation(temp, "1");
             }
-            else if (temp[8] === "accept") {
-                console.log(temp);
-                socket.broadcast.emit("resultInvitation", {
-                    "phoneReceiver": temp[0],
-                    "result": {
-                        "phoneSend": temp[2],
-                        "nameSend": temp[3],
-                        "resultInvite": "success"
-                    }
-                });
-                updateStatusInvitation(temp, "1");
-            }
+            // else => this inviter is Online
             else {
-                updateStatusInvitation(temp, "-1");
+                if (temp[8] === "refuse") {
+                    socket.broadcast.emit("resultInvitation", {
+                        "phoneReceiver": temp[0],
+                        "result": {
+                            "phoneSend": temp[2],
+                            "nameSend": temp[3],
+                            "resultInvite": "refuse"
+                        }
+                    });
+                    updateStatusInvitation(temp, "1");
+                }
+                else if (temp[8] === "accept") {
+                    console.log(temp);
+                    socket.broadcast.emit("resultInvitation", {
+                        "phoneReceiver": temp[0],
+                        "result": {
+                            "phoneSend": temp[2],
+                            "nameSend": temp[3],
+                            "resultInvite": "success"
+                        }
+                    });
+                    updateStatusInvitation(temp, "1");
+                }
+                else {
+                    updateStatusInvitation(temp, "-1");
+                }
             }
         });
 
@@ -200,29 +220,29 @@ module.exports = function (io) {
         if (check === "1") {
             var infoSaveDB = {
                 "userSend": temp[2],
-                "nameSend":temp[3],
+                "nameSend": temp[3],
                 "timeSend": temp[4],
                 "date": temp[5],
                 "time": temp[6],
                 "place": temp[7],
                 "status": temp[8],
-                "read":"0",
-                "seen":"0"
+                "read": "0",
+                "seen": "0"
             }
             infoInvatition.findOneAndUpdate({ userRecevice: temp[0] }, { $push: { invatitions: infoSaveDB } }, { safe: true, upsert: true, new: true }, function (err, data) {
             });
         }
-        else{
-             var infoSaveDB = {
+        else {
+            var infoSaveDB = {
                 "userSend": temp[0],
-                "nameSend":temp[1],
+                "nameSend": temp[1],
                 "timeSend": temp[4],
                 "date": temp[5],
                 "time": temp[6],
                 "place": temp[7],
                 "status": temp[8],
-                "read":"1",
-                "seen":"1"
+                "read": "1",
+                "seen": "1"
             }
             infoInvatition.findOneAndUpdate({ userRecevice: temp[2] }, { $push: { invatitions: infoSaveDB } }, { safe: true, upsert: true, new: true }, function (err, data) {
             });
