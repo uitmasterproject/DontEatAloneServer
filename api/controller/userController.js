@@ -87,9 +87,38 @@ module.exports=function(app){
         })
     })
 
+    app.get("/profile/allImage/:phone", function(req,res){
+        console.log(req.params.phone);
+        profile.getAllImage(req.params.phone,function(data){
+            res.json(data);
+        })
+    })
+
+
+
     app.get("/restaurant/:latlng",function(req,res){
-        console.log(req.params.latlng);
+        console.log(req.params.latlng+"getRestaurant");
         restaurant.getRestaurant(req.params.latlng, function(data){
+            res.json(data);
+        })
+    })
+
+    app.get("/restaurant/latlng/:latlng",function(req,res){
+        console.log(req.params.latlng+"latlng");
+        restaurant.getRestaurantFollowLatlng(req.params.latlng, function(data){
+            res.json(data);
+        })
+    })
+
+    app.get("/restaurant/district/:district", function(req,res){
+        console.log(req.params.district+"district");
+        restaurant.getRestaurantFollowDistrict(req.params.district, function(data){
+            res.json(data);
+        })
+    })
+
+    app.get("/restaurant", function(req,res){
+        restaurant.getAllRestaurant(function(data){
             res.json(data);
         })
     })
