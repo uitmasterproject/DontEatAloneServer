@@ -4,7 +4,7 @@ module.exports.getRestaurant = function (latlng, callback) {
     var listRestaurant = new Array();
     Restaurant.find({}, function (err, result) {
         console.log("hello");
-        if (result.length > 0) {
+        if (result!= null) {
             console.log(result);
             result.forEach(function (element) {
                 var latDistance = (latlng.split(",")[0] - element.latlng.split(",")[0]) * Math.PI / 180;
@@ -30,7 +30,7 @@ module.exports.getRestaurantFollowLatlng = function (latlng, callback) {
     var listRestaurant = new Array();
     Restaurant.find({}, function (err, result) {
         console.log("hello");
-        if (result.length > 0) {
+        if (result!=null) {
             console.log(result);
             result.forEach(function (element) {
                 var latDistance = (latlng.split(",")[0] - element.latlng.split(",")[0]) * Math.PI / 180;
@@ -55,7 +55,7 @@ module.exports.getRestaurantFollowDistrict= function(district, callback){
     console.log(district);
     var listRestaurant = new Array();
     Restaurant.find({}, function (err, result) {
-        if (result.length > 0) {
+        if (result!=null) {
             result.forEach(function (element) {
                 if(element.address.indexOf(district)!=-1){
                     listRestaurant.push(element);

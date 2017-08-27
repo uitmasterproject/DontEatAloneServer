@@ -100,5 +100,28 @@ module.exports.getAllImage = function (phone, callback) {
             callback(listImage);
         }
     })
+};
+
+module.exports.getPublicBlog = function (phone, limit, callback) {
+    var listPublicBlog = new Array();
+    MyStatusModel.findOne({ phone: phone }, function (err, result) {
+        if (result != null) {
+            console.log(result);
+            if (limit === "all") {
+                result.myinfoStatus.forEach(function (element) {
+                    listPublicBlog.push(element);
+                }, this);
+            }
+            else if (limit === "public") {
+                result.myinfoStatus.forEach(function (element) {
+                    if (element.limit === "public") {
+                        listPublicBlog.push(element);
+                    }
+                }, this);
+            }
+            console.log(listPublicBlog.length);
+            callback(listPublicBlog);
+        }
+    })
 }
 

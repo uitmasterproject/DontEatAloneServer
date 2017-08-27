@@ -69,6 +69,12 @@ module.exports=function(app){
         })
     })
 
+    app.put("/statusblog/edit/:phone", function(req,res){
+        blog.editStatusBlog(req.params.phone,req.body, function(data){
+
+        })
+    })
+
     app.get("/notification/:phone",function(req,res){
         var phone=req.params.phone;
         notification.getInfoNotification(phone,function(data){
@@ -90,6 +96,13 @@ module.exports=function(app){
     app.get("/profile/allImage/:phone", function(req,res){
         console.log(req.params.phone);
         profile.getAllImage(req.params.phone,function(data){
+            res.json(data);
+        })
+    })
+
+    app.get("/profile/publicBlog/:phone/:limit",function(req,res){
+        profile.getPublicBlog(req.params.phone, req.params
+        .limit,function(data){
             res.json(data);
         })
     })

@@ -98,8 +98,6 @@ module.exports.updateReadNotification = function (phoneRecevice, _phoneSend, _st
             }
         }
     })
-
-
 }
 
 module.exports.updateSeenNotification = function (phoneRecevice) {

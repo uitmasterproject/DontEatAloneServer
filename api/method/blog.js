@@ -1,4 +1,5 @@
 var MyStatusModel=require("../model/myStatusModel");
+var StatusModel=require("../model/statusModel");
 
 module.exports.addStatus=function(phone,infoStatus, callback){
 
@@ -20,7 +21,8 @@ module.exports.addStatus=function(phone,infoStatus, callback){
 
 module.exports.getAllStatus=function(phone,callback){
     MyStatusModel.find({phone:phone},function(err,data){
-        if(data.length!=0){
+        console.log(data);
+        if(data!=null){
             callback(data[0].myinfoStatus);
         }
     });
@@ -39,4 +41,14 @@ module.exports.deleteStatusBlog=function(phone,date,callback){
             }
         }
     );
+};
+
+module.exports.editStatusBlog=function(phone,infoStatus,callback){
+    var info=new StatusModel();
+    info=inforStatus;
+    MyStatusModel.findOne({phone:phone,'myinfoStatus.date':info.date},function(data){
+        if(data!=null){
+            console.log(data);
+        }
+    })
 }
