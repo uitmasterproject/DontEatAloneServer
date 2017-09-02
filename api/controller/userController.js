@@ -70,9 +70,10 @@ module.exports=function(app){
     })
 
     app.put("/statusblog/edit/:phone", function(req,res){
-        blog.editStatusBlog(req.params.phone,req.body, function(data){
-
-        })
+        console.log(req.params.phone);
+        blog.editStatusBlog(req.params.phone,req.body,function(data){
+            res.json(data);
+        });
     })
 
     app.get("/notification/:phone",function(req,res){
